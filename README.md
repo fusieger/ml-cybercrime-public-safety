@@ -17,3 +17,8 @@ Desenvolver um modelo de Machine Learning integrado a uma aplicação interativa
 - Google Colab
 - GitHub
 - Streamlit Cloud
+
+## Planejamento
+- [Business Model Canvas](docs/canvas.md)
+- Product Backlog 
+- Kanban
