@@ -1,32 +1,45 @@
+Aqui estão os links diretos para acesso aos artigos científicos, dissertações e repositórios citados na resposta anterior:
 
-### 3.3 *(Extra)* Crime Forecasting: A Spatio-temporal Analysis with Deep Learning Models (arXiv, CNN-LSTM)
+## 1. Predição Espaço-Temporal de Crimes no Brasil (Policiamento Preditivo)
+
+* **Predspot: Predicting Crime Hotspots with Machine Learning (UFRN)**
+* **Dissertação no Repositório da UFRN:** [Acessar no Repositório UFRN](https://repositorio.ufrn.br/items/8fc98934-67e1-46f6-990e-8ef36877eb9f)
+* **Código Aberto e Implementação (GitHub):** [Acessar Repositório no GitHub](https://github.com/adaj/predspot)
+
+
+* **STEval: A Framework for Evaluating Spatio-Temporal Crime Prediction Models**
+* **Publicação / Artigo Completo:** [Acessar via ResearchGate](https://www.researchgate.net/publication/396514597_STEval_A_framework_for_evaluating_spatio-temporal_crime_prediction_models)
+
+
+* **Policiamento Preditivo e Inteligência Artificial: Análise de Desempenho do Algoritmo Random Forest na Predição de Ocorrências**
+* **Artigo Completo (Revista FT):** [Acessar Artigo na Revista FT](https://revistaft.com.br/policiamento-preditivo-e-inteligencia-artificial-analise-de-desempenho-do-algoritmo-de-aprendizado-de-maquina-supervisionado-random-forest-na-predicao-de-ocorrencias-policiais-de-roubo-nas-zonas-da-r/)
+
+
+
+---
+
+## 2. ML e NLP Aplicados a Estelionatos, Fraudes Digitais e BOs
+
+* **Inteligência Artificial na Gestão da Investigação Criminal (RIBSP)**
+* **Artigo Completo (Revista do IBSP):** [Acessar via Portal da RIBSP](https://revista.ibsp.org.br/index.php/RIBSP/article/view/253)
+
+
+* **Detecção de Fraudes no Segmento de Crédito Financeiro Utilizando Aprendizado de Máquina: Uma Revisão da Literatura (2022)**
+* **Artigo Completo (Revista e-TECH):** [Acessar Artigo no Portal e-TECH](https://etech.sc.senai.br/revista-cientifica/article/view/1198)
+
+
+
+---
+
+## 3. Estado da Arte e Metodologia Científica (Referências de Base)
+
+* **A Systematic Review of Multi-Scale Spatio-Temporal Crime Prediction Methods (MDPI, 2023)**
+* **Artigo Completo / Open Access:** [Acessar no MDPI](https://www.mdpi.com/2220-9964/12/6/209)
+
+
+* **Crime Prediction Using Spatio-Temporal Data**
+* **Artigo Completo:** [Acessar via ResearchGate](https://www.researchgate.net/publication/343042297_Crime_Prediction_Using_Spatio-Temporal_Data)
+
+
+* *(Extra)* **Crime Forecasting: A Spatio-temporal Analysis with Deep Learning Models (arXiv, CNN-LSTM)**
 * **Pré-print / Artigo Completo:** [Acessar no arXiv](https://arxiv.org/abs/2502.07465)
-* **Resumo Metodológico:** Apresenta arquiteturas híbridas de *Deep Learning* que combinam **Redes Neurais Convolucionais (CNN)** para captura de características espaciais e **Redes de Memória de Longo e Curto Prazo (LSTM)** para dinâmicas temporais.
-* **Principais Destaques:**
-  * **Arquitetura CNN-LSTM:** A camada CNN interpreta a grade territorial da cidade como uma "imagem" de intensidade criminal, enquanto a LSTM processa a sequência evolutiva ao longo do tempo.
-  * **Estado da Arte (SOTA):** Supera modelos tradicionais (como ARIMA, KDE e Random Forest isolado) em cenários de alta densidade urbana com múltiplas variáveis contextuais (clima, eventos de massa, pontos de interesse de transporte).
-
----
-
-## 4. Síntese Comparativa das Tecnologias e Algoritmos
-
-| Classe Metodológica | Algoritmos Típicos | Aplicação Principal na Segurança Pública | Pontos Fortes | Limitações |
-| :--- | :--- | :--- | :--- | :--- |
-| **Estatística Espacial** | KDE, SEPP (ETAS) | Mapeamento de manchas de calor (*Hotspots*); policiamento ostensivo imediato. | Baixo custo computacional; alta interpretabilidade visual. | Dificuldade em capturar relações lineares/não-lineares complexas com variáveis externas. |
-| **ML Supervisionado** | Random Forest, XGBoost, LightGBM | Predição em grades espaciais; pontuação de risco operacional por bairro/zona. | Interpretabilidade (*Feature Importance*); robustez com dados tabulares operacionais. | Requer engenharia de atributos (*Feature Engineering*) manual e bem estruturada. |
-| **Deep Learning (Espaço-Temporal)** | CNN-LSTM, GNN (Graph Neural Networks) | Predição fina de séries temporais espaciais; integração do grafo viário urbano. | Alta acurácia em grandes centros urbanos; captura dinâmicas complexas de transbordo. | Exige grande volume de dados históricos; menor explicabilidade (efeito "caixa preta"). |
-| **Processamento de Linguagem Natural (NLP)** | TF-IDF, BERTimbau, Transformers em PT-BR | Triagem de BOs de estelionato; agrupamento de narrativas criminais por *modus operandi*. | Identificação de quadrilhas e crimes cometidos com a mesma técnica textual ou bancária. | Sensível a erros ortográficos, abreviações policiais e variações regionais na redação. |
-
----
-
-## 5. Recomendações Práticas para Aplicação em Segurança Pública
-
-1. **Governança de Dados e Georreferenciamento:**
-   * Priorizar a qualidade do georreferenciamento de chamados (190) e registros (BOs) antes de aplicar arquiteturas de *Deep Learning*. Dados imprecisos geram *hotspots* distorcidos.
-2. **Uso Híbrido de Métodos (KDE + ML):**
-   * Em operações diárias de batalhão, mapas visuais baseados em KDE ou Random Forest (como demonstrado no **Predspot**) oferecem retorno imediato e maior aceitação pela tropa do que sistemas puramente baseados em caixas pretas.
-3. **Triagem de Estelionato via NLP (Inquérito Policial Inteligente):**
-   * Empregar pipelines de NLP adaptados ao português brasileiro (como modelos baseados no *BERTimbau*) para extrair entidades automáticas de BOs eletrônicos (chaves Pix, telefones, links fraudulentos e padrões de narrativa de golpe), conectando inquéritos dispersos entre delegacias.
-
----
-*Documento compilado como material de referência acadêmica, técnica e operacional em Criminologia Computacional e Inteligência Artificial na Segurança Pública.*
