@@ -46,3 +46,24 @@ Os dados populacionais serão utilizados para normalização das ocorrências cr
 Os arquivos presentes em `raw/` correspondem aos dados originais obtidos das fontes oficiais e não devem ser modificados diretamente.
 
 Os anos de 2022 e 2023 possuem fonte/metodologia distinta das estimativas populacionais anuais tradicionais e serão analisados e documentados durante a etapa de preparação dos dados.
+
+---
+
+## IBGE — Produto Interno Bruto dos Municípios
+
+**Instituição:** Instituto Brasileiro de Geografia e Estatística (IBGE)
+
+**Fonte:** Produto Interno Bruto dos Municípios
+
+**Granularidade espacial:** Município
+
+**Granularidade temporal:** Anual
+
+**Variáveis de interesse:**
+- PIB municipal;
+- PIB per capita;
+- código IBGE do município;
+- ano.
+
+**Utilização prevista:**
+Caracterização econômica dos municípios e utilização de indicadores econômicos como variáveis explicativas na análise e modelagem das ocorrências de estelionato.
