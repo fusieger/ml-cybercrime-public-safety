@@ -1,4 +1,4 @@
-Artigo Científico
+## Artigo Científico
 
 Esta pasta contém os arquivos relacionados ao artigo científico desenvolvido no projeto.
 
@@ -6,7 +6,7 @@ O artigo apresenta a fundamentação teórica, os trabalhos relacionados, a meto
 
 A edição colaborativa do artigo é realizada pelo Overleaf.
 
-Overleaf
+## Overleaf
 
 Acesse o projeto pelo link:
 
