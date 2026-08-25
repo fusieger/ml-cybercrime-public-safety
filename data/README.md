@@ -1,12 +1,34 @@
 # Dados
 
-Este diretório contém os conjuntos de dados utilizados no projeto "Predição Espaço-Temporal de Estelionatos e Fraudes Digitais utilizando Machine Learning".
+Este diretório contém os conjuntos de dados utilizados no projeto "Predição Espaço-Temporal de Estelionatos e Fraudes Digitais: um Estudo de Caso no Espírito Santo".
 
 ## Estrutura
 
 - `raw/`: dados originais obtidos das fontes oficiais, sem alterações.
 - `processed/`: dados resultantes das etapas de limpeza, integração
   e transformação.
+---
+
+### SESP/ES - Ocorrências de Estelionato e Fraude
+
+Os dados criminais utilizados como base principal do projeto são disponibilizados pela **Secretaria de Estado da Segurança Pública e Defesa Social do Espírito Santo (SESP/ES)**, por meio do Portal de Dados Abertos do Governo do Estado do Espírito Santo.
+
+O conjunto de dados contém registros de ocorrências relacionadas a **Estelionato e Fraude**, com dados disponíveis a partir de 2023.
+
+**Fonte:** SESP/ES — Portal de Dados Abertos do Espírito Santo  
+**Dataset:** Estelionato e Fraude  
+**Formato:** CSV  
+**Período disponível:** a partir de 2023  
+**Página oficial:**  
+https://dados.es.gov.br/dataset/estelionato-fraude
+
+Esses dados constituem a principal fonte para a análise temporal e espacial das ocorrências de estelionato e fraude neste projeto.
+
+| Ano | Arquivo | Fonte |
+|---|---|---|
+| 2023 | estelionato-e-fraude.csv | SESP/ES |
+| 2024 | estelionato-e-fraude.csv | SESP/ES |
+| 2025 | estelionato-e-fraude-2025.csv | SESP/ES |
 
 ---
 
