@@ -26,8 +26,7 @@ Esses dados constituem a principal fonte para a análise temporal e espacial das
 
 | Ano | Arquivo | Fonte |
 |---|---|---|
-| 2023 | estelionato-e-fraude.csv | SESP/ES |
-| 2024 | estelionato-e-fraude.csv | SESP/ES |
+| 2023-2024 | estelionato-e-fraude.csv | SESP/ES |
 | 2025 | estelionato-e-fraude-2025.csv | SESP/ES |
 
 ---
