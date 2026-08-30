@@ -2,7 +2,7 @@
 Projeto desenvolvido na disciplina Planejamento e Gestão de Projetos do curso de Ciência da Computação da UFFS.
 
 ## Problema
-Como técnicas de Machine Learning podem ser utilizadas para identificar padrões espaço-temporais e estimar o risco relacionado à ocorrência de estelionatos e fraudes na Segurança Pública do Espírito Santo?
+Como técnicas de Machine Learning podem ser utilizadas para estimar mensalmente a taxa de ocorrências de estelionato e fraude nos municípios do Espírito Santo a partir do histórico das ocorrências e da população municipal?
 
 ## Objetivo
 Desenvolver um modelo de Machine Learning integrado a uma aplicação interativa para identificação de padrões, tendências e níveis de risco.
