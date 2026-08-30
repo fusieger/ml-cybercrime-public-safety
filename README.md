@@ -1,8 +1,8 @@
-# Predição Espaço-Temporal de Estelionatos e Fraudes Digitais: um Estudo de Caso no Espírito Santo
+# Predição Espaço-Temporal de Estelionatos e Fraudes: um Estudo de Caso no Espírito Santo
 Projeto desenvolvido na disciplina Planejamento e Gestão de Projetos do curso de Ciência da Computação da UFFS.
 
 ## Problema
-Como técnicas de Machine Learning podem ser utilizadas para identificar padrões espaço-temporais e estimar o risco relacionado à ocorrência de estelionatos e fraudes digitais na Segurança Pública do Espírito Santo?
+Como técnicas de Machine Learning podem ser utilizadas para identificar padrões espaço-temporais e estimar o risco relacionado à ocorrência de estelionatos e fraudes na Segurança Pública do Espírito Santo?
 
 ## Objetivo
 Desenvolver um modelo de Machine Learning integrado a uma aplicação interativa para identificação de padrões, tendências e níveis de risco.
