@@ -2,6 +2,14 @@
 
 Este diretório contém os conjuntos de dados utilizados no projeto "Predição Espaço-Temporal de Estelionatos e Fraudes Digitais: um Estudo de Caso no Espírito Santo".
 
+##Justificativa de escolha dos datasets
+
+SESP/ES: escolhido por fornecer dados oficiais de ocorrências de estelionato e fraude em nível municipal, com informação temporal suficiente para análises espaço-temporais e compatibilidade direta com o problema de pesquisa.
+
+IBGE: escolhido por ser a fonte oficial de população municipal brasileira, permitindo normalizar as ocorrências absolutas e calcular taxas por 100 mil habitantes, reduzindo distorções causadas pelas diferenças populacionais entre municípios.
+
+Outros datasets avaliados possuíam granularidade insuficiente, ausência de dados municipais ou incompatibilidade temporal.
+
 ## Estrutura
 
 - `raw/`: dados originais obtidos das fontes oficiais, sem alterações.
