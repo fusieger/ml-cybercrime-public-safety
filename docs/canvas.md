@@ -1,7 +1,7 @@
 # Business Model Canvas
 
 ## 1. Proposta de Valor
-Sistema de apoio à decisão que utiliza Machine Learning para identificar padrões, tendências e níveis de risco relacionados a estelionatos e fraudes digitais no estado do Espírito Santo.
+Sistema de apoio à decisão que utiliza Machine Learning para identificar padrões, tendências e níveis de risco relacionados a estelionatos e fraudes no estado do Espírito Santo.
 
 ## 2. Segmentos de Usuários
 - Gestores de Segurança Pública
@@ -42,5 +42,5 @@ O projeto utilizará prioritariamente ferramentas gratuitas e de código aberto,
 - Identificação de padrões
 - Visualização geográfica
 - Identificação de tendências
-- Classificação de risco
+- Estimativa de níveis de risco
 - Apoio à tomada de decisão
