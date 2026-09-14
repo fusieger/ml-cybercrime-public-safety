@@ -5,7 +5,7 @@ Projeto desenvolvido na disciplina Planejamento e Gestão de Projetos do curso d
 Como técnicas de Machine Learning podem ser utilizadas para estimar mensalmente a taxa de ocorrências de estelionato e fraude nos municípios do Espírito Santo a partir do histórico das ocorrências e da população municipal?
 
 ## Objetivo
-Desenvolver um modelo de Machine Learning integrado a uma aplicação interativa para identificação de padrões, tendências e níveis de risco.
+Desenvolver e avaliar um modelo de Machine Learning capaz de identificar padrões espaço-temporais e estimar mensalmente a taxa de ocorrências de estelionato e fraude nos municípios do Espírito Santo, integrado a uma aplicação interativa para exploração dos resultados.
 
 ## Fontes de dados
 - Secretaria de Estado da Segurança Pública e Defesa Social do Espírito Santo (SESP/ES)
