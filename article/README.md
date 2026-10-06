@@ -10,4 +10,4 @@ A edição colaborativa do artigo é realizada pelo Overleaf.
 
 Acesse o projeto pelo link:
 
-https://www.overleaf.com/project/6a7ba9063fc0963465d341db
+https://www.overleaf.com/project/6ac0f1d35bf1d0b0df2f55b9
