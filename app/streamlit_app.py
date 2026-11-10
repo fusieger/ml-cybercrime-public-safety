@@ -23,25 +23,29 @@ st.set_page_config(
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-DATA_PATH = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "modelagem"
-    / "painel_municipal_mensal.csv"
-)
+DATA_PATH = PROJECT_ROOT / "data" / "processed" / "modelagem" / "painel_municipal_mensal.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "random_forest.joblib"
+FEATURES_PATH = PROJECT_ROOT / "models" / "features_modelo.json"
 
-MODEL_PATH = (
-    PROJECT_ROOT
-    / "models"
-    / "random_forest.joblib"
-)
 
-FEATURES_PATH = (
-    PROJECT_ROOT
-    / "models"
-    / "features_modelo.json"
-)
+# ============================================================
+# CONSTANTES DE INTERFACE
+# ============================================================
+
+NOMES_MESES = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "Maio",
+    6: "Junho",
+    7: "Julho",
+    8: "Agosto",
+    9: "Setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro"
+}
 
 
 # ============================================================
@@ -52,15 +56,8 @@ FEATURES_PATH = (
 def carregar_dados():
     df = pd.read_csv(DATA_PATH)
 
-    df["ano"] = pd.to_numeric(
-        df["ano"],
-        errors="coerce"
-    )
-
-    df["mes"] = pd.to_numeric(
-        df["mes"],
-        errors="coerce"
-    )
+    df["ano"] = pd.to_numeric(df["ano"], errors="coerce")
+    df["mes"] = pd.to_numeric(df["mes"], errors="coerce")
 
     df["data"] = pd.to_datetime(
         dict(
@@ -80,11 +77,7 @@ def carregar_modelo():
 
 @st.cache_data
 def carregar_features():
-    with open(
-        FEATURES_PATH,
-        "r",
-        encoding="utf-8"
-    ) as arquivo:
+    with open(FEATURES_PATH, "r", encoding="utf-8") as arquivo:
         return json.load(arquivo)
 
 
@@ -122,18 +115,12 @@ features_modelo = carregar_features()
 # ============================================================
 
 def preparar_entrada_modelo(linha):
-    """
-    Reconstrói uma única observação exatamente com as colunas
-    utilizadas durante o treinamento do Random Forest.
-    """
-
     entrada = pd.DataFrame(
         0.0,
         index=[0],
         columns=features_modelo
     )
 
-    # Features numéricas utilizadas no notebook
     colunas_numericas = [
         "mes",
         "populacao",
@@ -148,9 +135,6 @@ def preparar_entrada_modelo(linha):
         if coluna in entrada.columns:
             entrada.loc[0, coluna] = linha[coluna]
 
-    # O notebook usa pd.get_dummies(..., drop_first=True).
-    # Para municípios diferentes da categoria removida, haverá
-    # uma feature no formato municipio_NOME_DO_MUNICIPIO.
     coluna_municipio = f"municipio_{linha['municipio']}"
 
     if coluna_municipio in entrada.columns:
@@ -166,16 +150,23 @@ def prever_linha(linha):
 
 
 def formatar_numero(valor, casas=2):
-    return f"{valor:,.{casas}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    return (
+        f"{valor:,.{casas}f}"
+        .replace(",", "X")
+        .replace(".", ",")
+        .replace("X", ".")
+    )
+
+
+def nome_mes(numero):
+    return NOMES_MESES.get(int(numero), str(numero))
 
 
 # ============================================================
 # CABEÇALHO
 # ============================================================
 
-st.title(
-    "Predição Espaço-Temporal de Estelionatos e Fraudes"
-)
+st.title("Predição Espaço-Temporal de Estelionatos e Fraudes")
 
 st.caption(
     "Estudo de caso com dados dos municípios do Espírito Santo "
@@ -183,10 +174,42 @@ st.caption(
 )
 
 st.info(
-    "O modelo estima a taxa mensal de ocorrências por 100 mil "
-    "habitantes. As previsões não devem ser interpretadas como "
+    "A aplicação analisa registros públicos de estelionato e fraude "
+    "e estima a taxa mensal de ocorrências por 100 mil habitantes. "
+    "As previsões têm finalidade acadêmica e exploratória e não "
+    "representam probabilidade individual de vitimização nem "
     "evidência de uma causa criminal específica."
 )
+
+with st.expander("Como interpretar os principais indicadores?"):
+    st.markdown(
+        """
+        **Ocorrência:** corresponde a um registro presente na base pública
+        de Estelionato e Fraude da SESP/ES utilizada neste projeto.
+
+        **Taxa por 100 mil habitantes:** normaliza o número de ocorrências
+        pela população do município, permitindo comparar municípios de
+        tamanhos diferentes.
+
+        **Ocorrências Web:** registros cuja classificação de local está
+        associada ao ambiente Web na base analisada.
+
+        **Taxa prevista:** valor estimado pelo modelo Random Forest a partir
+        do histórico recente do município e das demais características usadas
+        no treinamento.
+
+        **Taxa observada:** valor efetivamente calculado a partir das
+        ocorrências registradas no período.
+
+        **Diferença absoluta:** distância entre a taxa prevista e a taxa
+        observada, sem considerar se o modelo estimou acima ou abaixo do valor
+        real.
+
+        **Média móvel de 3 meses:** média das taxas dos três meses anteriores.
+        Ela ajuda a visualizar a tendência da série, suavizando oscilações
+        mensais, mas não substitui os valores observados.
+        """
+    )
 
 
 # ============================================================
@@ -208,17 +231,16 @@ aba_geral, aba_municipio, aba_predicoes = st.tabs(
 
 with aba_geral:
 
-    total_ocorrencias = int(
-        df["total_ocorrencias"].sum()
+    st.subheader("Indicadores gerais")
+
+    st.caption(
+        "Os indicadores abaixo resumem o conjunto completo analisado "
+        "entre 2023 e 2025."
     )
 
-    total_municipios = int(
-        df["municipio"].nunique()
-    )
-
-    taxa_media = float(
-        df["taxa_100k_total"].mean()
-    )
+    total_ocorrencias = int(df["total_ocorrencias"].sum())
+    total_municipios = int(df["municipio"].nunique())
+    taxa_media = float(df["taxa_100k_total"].mean())
 
     proporcao_web = (
         df["ocorrencias_web"].sum()
@@ -248,55 +270,72 @@ with aba_geral:
         f"{formatar_numero(proporcao_web)}%"
     )
 
-    st.subheader(
-        "Evolução mensal das ocorrências"
+    st.caption(
+        "A taxa média permite comparar a intensidade relativa dos registros, "
+        "enquanto 'Ocorrências Web' indica a proporção de registros classificados "
+        "como associados ao ambiente Web."
     )
+
+    st.subheader("Evolução mensal das ocorrências")
 
     evolucao = (
         df.groupby("data", as_index=False)
-        .agg(
-            total_ocorrencias=(
+        .agg(total_ocorrencias=("total_ocorrencias", "sum"))
+        .sort_values("data")
+    )
+
+    evolucao["media_movel_3m"] = (
+        evolucao["total_ocorrencias"]
+        .rolling(window=3, min_periods=3)
+        .mean()
+    )
+
+    grafico_evolucao = (
+        evolucao[
+            [
+                "data",
                 "total_ocorrencias",
-                "sum"
-            )
-        )
+                "media_movel_3m"
+            ]
+        ]
         .set_index("data")
+        .rename(
+            columns={
+                "total_ocorrencias": "Ocorrências mensais",
+                "media_movel_3m": "Média móvel de 3 meses"
+            }
+        )
     )
 
     st.line_chart(
-        evolucao["total_ocorrencias"],
+        grafico_evolucao,
         x_label="Mês",
         y_label="Ocorrências"
     )
 
-    st.subheader(
-        "Taxa média por município"
+    st.caption(
+        "A média móvel de 3 meses suaviza oscilações pontuais e facilita "
+        "a identificação da tendência geral da série."
     )
 
+    st.subheader("Taxa média por município")
+
     ranking_historico = (
-        df.groupby(
-            "municipio",
-            as_index=False
-        )
-        .agg(
-            taxa_media=(
-                "taxa_100k_total",
-                "mean"
-            )
-        )
-        .sort_values(
-            "taxa_media",
-            ascending=False
-        )
+        df.groupby("municipio", as_index=False)
+        .agg(taxa_media=("taxa_100k_total", "mean"))
+        .sort_values("taxa_media", ascending=False)
         .head(10)
     )
 
     st.bar_chart(
-        ranking_historico.set_index(
-            "municipio"
-        )["taxa_media"],
+        ranking_historico.set_index("municipio")["taxa_media"],
         x_label="Município",
         y_label="Taxa média / 100 mil"
+    )
+
+    st.caption(
+        "O ranking utiliza taxas normalizadas por população. "
+        "Taxas elevadas não significam, isoladamente, maior risco individual."
     )
 
 
@@ -320,10 +359,7 @@ with aba_municipio:
     )
 
     df_municipio = (
-        df[
-            df["municipio"]
-            == municipio_selecionado
-        ]
+        df[df["municipio"] == municipio_selecionado]
         .sort_values("data")
         .copy()
     )
@@ -337,24 +373,25 @@ with aba_municipio:
 
     col2.metric(
         "Taxa média / 100 mil",
-        formatar_numero(
-            df_municipio[
-                "taxa_100k_total"
-            ].mean()
-        )
+        formatar_numero(df_municipio["taxa_100k_total"].mean())
     )
 
     col3.metric(
         "Taxa máxima / 100 mil",
-        formatar_numero(
-            df_municipio[
-                "taxa_100k_total"
-            ].max()
-        )
+        formatar_numero(df_municipio["taxa_100k_total"].max())
     )
 
-    st.subheader(
-        "Evolução da taxa por 100 mil habitantes"
+    st.caption(
+        "A taxa por 100 mil habitantes relaciona o número de ocorrências "
+        "à população do município, permitindo comparação entre localidades."
+    )
+
+    st.subheader("Evolução da taxa por 100 mil habitantes")
+
+    df_municipio["media_movel_visual_3m"] = (
+        df_municipio["taxa_100k_total"]
+        .rolling(window=3, min_periods=3)
+        .mean()
     )
 
     grafico_taxas = (
@@ -362,14 +399,16 @@ with aba_municipio:
             [
                 "data",
                 "taxa_100k_total",
-                "taxa_100k_web"
+                "taxa_100k_web",
+                "media_movel_visual_3m"
             ]
         ]
         .set_index("data")
         .rename(
             columns={
                 "taxa_100k_total": "Taxa total",
-                "taxa_100k_web": "Taxa Web"
+                "taxa_100k_web": "Taxa Web",
+                "media_movel_visual_3m": "Média móvel 3 meses"
             }
         )
     )
@@ -380,9 +419,12 @@ with aba_municipio:
         y_label="Taxa / 100 mil"
     )
 
-    st.subheader(
-        "Histórico mensal"
+    st.caption(
+        "A linha de média móvel de 3 meses ajuda a visualizar a tendência "
+        "sem ocultar os valores mensais observados."
     )
+
+    st.subheader("Histórico mensal")
 
     tabela_municipio = df_municipio[
         [
@@ -395,6 +437,8 @@ with aba_municipio:
             "taxa_100k_web"
         ]
     ].copy()
+
+    tabela_municipio["mes"] = tabela_municipio["mes"].map(NOMES_MESES)
 
     tabela_municipio = tabela_municipio.rename(
         columns={
@@ -422,15 +466,19 @@ with aba_municipio:
 with aba_predicoes:
 
     st.write(
-        "Nesta etapa, o modelo Random Forest é aplicado aos registros "
-        "de 2025 utilizando exatamente as mesmas features temporais "
-        "empregadas no treinamento."
+        "O modelo Random Forest é aplicado aos registros de 2025 utilizando "
+        "as mesmas características temporais empregadas durante o treinamento."
+    )
+
+    st.info(
+        "A taxa prevista é uma estimativa do modelo. A taxa observada é o "
+        "valor calculado a partir dos registros efetivamente presentes na base "
+        "para aquele município e mês. A diferença entre elas representa o erro "
+        "da estimativa naquele período."
     )
 
     df_2025 = (
-        df[
-            df["ano"] == 2025
-        ]
+        df[df["ano"] == 2025]
         .dropna(
             subset=[
                 "taxa_lag_3",
@@ -456,8 +504,7 @@ with aba_predicoes:
 
     meses_disponiveis = sorted(
         df_2025[
-            df_2025["municipio"]
-            == municipio_predicao
+            df_2025["municipio"] == municipio_predicao
         ]["mes"]
         .unique()
         .tolist()
@@ -466,77 +513,66 @@ with aba_predicoes:
     mes_predicao = col_filtro2.selectbox(
         "Mês de 2025",
         meses_disponiveis,
+        format_func=nome_mes,
         key="mes_predicao"
     )
 
     linha = (
         df_2025[
-            (
-                df_2025["municipio"]
-                == municipio_predicao
-            )
-            & (
-                df_2025["mes"]
-                == mes_predicao
-            )
+            (df_2025["municipio"] == municipio_predicao)
+            & (df_2025["mes"] == mes_predicao)
         ]
         .iloc[0]
     )
 
     taxa_prevista = prever_linha(linha)
-    taxa_observada = float(
-        linha["taxa_100k_total"]
-    )
+    taxa_observada = float(linha["taxa_100k_total"])
 
-    diferenca = (
-        taxa_observada
-        - taxa_prevista
-    )
-
-    diferenca_absoluta = abs(
-        diferenca
-    )
+    diferenca = taxa_observada - taxa_prevista
+    diferenca_absoluta = abs(diferenca)
 
     col1, col2, col3 = st.columns(3)
 
     col1.metric(
         "Taxa prevista / 100 mil",
-        formatar_numero(
-            taxa_prevista
-        )
+        formatar_numero(taxa_prevista)
     )
 
     col2.metric(
         "Taxa observada / 100 mil",
-        formatar_numero(
-            taxa_observada
-        )
+        formatar_numero(taxa_observada)
     )
 
     col3.metric(
         "Diferença absoluta",
-        formatar_numero(
-            diferenca_absoluta
-        )
+        formatar_numero(diferenca_absoluta)
     )
 
     if diferenca > 0:
         st.warning(
-            "A taxa observada ficou acima da previsão do modelo "
-            f"em {formatar_numero(diferenca)} pontos por 100 mil habitantes."
+            "Neste período, a taxa observada ficou "
+            f"{formatar_numero(diferenca)} pontos por 100 mil habitantes "
+            "acima da estimativa do modelo. Isso indica um desvio entre "
+            "o comportamento observado e o padrão histórico aprendido, "
+            "sem estabelecer sua causa."
         )
     elif diferenca < 0:
         st.success(
-            "A taxa observada ficou abaixo da previsão do modelo "
-            f"em {formatar_numero(abs(diferenca))} pontos por 100 mil habitantes."
+            "Neste período, a taxa observada ficou "
+            f"{formatar_numero(abs(diferenca))} pontos por 100 mil habitantes "
+            "abaixo da estimativa do modelo."
         )
     else:
         st.success(
-            "A taxa observada coincidiu com a previsão do modelo."
+            "Neste período, a taxa observada coincidiu com a previsão do modelo."
         )
 
-    st.subheader(
-        "Histórico utilizado na previsão"
+    st.subheader("Histórico utilizado na previsão")
+
+    st.caption(
+        "Estas características representam o comportamento recente do município "
+        "antes do mês analisado. O valor do próprio mês não é utilizado para "
+        "construir os lags ou as médias móveis."
     )
 
     historico = pd.DataFrame(
@@ -558,10 +594,7 @@ with aba_predicoes:
         }
     )
 
-    historico["Valor"] = (
-        historico["Valor"]
-        .round(2)
-    )
+    historico["Valor"] = historico["Valor"].round(2)
 
     st.dataframe(
         historico,
@@ -571,20 +604,14 @@ with aba_predicoes:
 
     st.divider()
 
-    st.subheader(
-        "Ranking de taxa prevista em 2025"
-    )
+    st.subheader("Ranking de taxa prevista em 2025")
 
     @st.cache_data
-    def gerar_previsoes_2025(
-        dados_2025
-    ):
+    def gerar_previsoes_2025(dados_2025):
         previsoes = []
 
         for _, registro in dados_2025.iterrows():
-            previsoes.append(
-                prever_linha(registro)
-            )
+            previsoes.append(prever_linha(registro))
 
         resultado = dados_2025[
             [
@@ -598,27 +625,13 @@ with aba_predicoes:
 
         return resultado
 
-
-    resultados_2025 = gerar_previsoes_2025(
-        df_2025
-    )
+    resultados_2025 = gerar_previsoes_2025(df_2025)
 
     ranking_previsto = (
         resultados_2025
-        .groupby(
-            "municipio",
-            as_index=False
-        )
-        .agg(
-            taxa_prevista=(
-                "taxa_prevista",
-                "mean"
-            )
-        )
-        .sort_values(
-            "taxa_prevista",
-            ascending=False
-        )
+        .groupby("municipio", as_index=False)
+        .agg(taxa_prevista=("taxa_prevista", "mean"))
+        .sort_values("taxa_prevista", ascending=False)
         .head(10)
     )
 
@@ -634,11 +647,14 @@ with aba_predicoes:
     )
 
     st.bar_chart(
-        ranking_previsto.set_index(
-            "municipio"
-        )["taxa_prevista"],
+        ranking_previsto.set_index("municipio")["taxa_prevista"],
         x_label="Município",
         y_label="Taxa prevista / 100 mil"
+    )
+
+    st.caption(
+        "O ranking compara taxas previstas normalizadas por população. "
+        "Ele não representa probabilidade individual de sofrer fraude."
     )
 
 
@@ -650,6 +666,6 @@ st.divider()
 
 st.caption(
     "Projeto acadêmico desenvolvido na Universidade Federal da "
-    "Fronteira Sul (UFFS). Os resultados possuem finalidade "
-    "exploratória e acadêmica."
+    "Fronteira Sul (UFFS). Dados públicos da SESP/ES e do IBGE. "
+    "Os resultados possuem finalidade exploratória e acadêmica."
 )
